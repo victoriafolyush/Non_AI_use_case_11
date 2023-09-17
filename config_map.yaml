@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-index-config
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>MyNewNginxConf</title>
+    </head>
+    <body>
+        <h1>This is new page from ConfigMap</h1>
+    </body>
+    </html>

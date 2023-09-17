@@ -1,0 +1,4 @@
+eksctl.exe
+kubectl.exe
+kubectl.exe.sha256
+*.pem

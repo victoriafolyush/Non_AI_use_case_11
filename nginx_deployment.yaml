@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      serviceAccountName: nginx-service-account
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        env:
+        - name: DUMMY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: some_dummy
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-index-volume
+          mountPath: /usr/share/nginx/html
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: / 
+            port: 80
+          initialDelaySeconds: 5 
+          periodSeconds: 5 
+      volumes:
+        - name: nginx-index-volume
+          configMap:
+            name: nginx-index-config 
